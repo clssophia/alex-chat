@@ -635,49 +635,41 @@
             0% {
 
                 filter: none;
-                opacity: 1;
 
             }
 
-            15% {
+            20% {
 
                 filter:
-                    grayscale(1) contrast(2) brightness(1.5);
+                    saturate(0.8) brightness(1.1);
 
             }
 
-            30% {
+            40% {
 
                 filter:
-                    grayscale(1) contrast(3) brightness(0.5);
-
-            }
-
-            45% {
-
-                filter:
-                    grayscale(1) contrast(2.5) brightness(1.8);
+                    saturate(0.5) contrast(1.5) brightness(0.95);
 
             }
 
             60% {
 
                 filter:
-                    grayscale(1) brightness(0.7);
+                    saturate(0.2) contrast(2) brightness(0.8);
 
             }
 
             80% {
 
                 filter:
-                    grayscale(1) contrast(3);
+                    grayscale(1) contrast(2.5) brightness(0.7);
 
             }
 
             100% {
 
-                filter: none;
-                opacity: 1;
+                filter:
+                    grayscale(1) contrast(3) brightness(0.6);
 
             }
 
@@ -778,6 +770,8 @@
             pointer-events: none;
 
             z-index: 99999;
+
+            transition: opacity 0.5s;
 
         }
 
@@ -1479,6 +1473,10 @@
                                     );
 
                             }
+                            chat.style.transition =
+                                "";
+                            chat.style.opacity =
+                                "0";
 
                             document
                                 .getElementById(
@@ -1487,6 +1485,16 @@
                                 .classList.remove(
                                     "show"
                                 );
+
+                            setTimeout(function () {
+
+                                chat.style.transition =
+                                    "opacity 0.5s";
+
+                                chat.style.opacity =
+                                    "1";
+
+                            }, 50);
                         }, 800);
                     }, 3000);
 
