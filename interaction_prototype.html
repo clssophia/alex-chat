@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="apple-mobile-web-app-title" content="Alex">
+    <title>Alex</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: #b2c7da;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+
+            background: #fae100;
+
+            height: 56px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 16px;
+
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .chat {
+
+            padding: 15px;
+
+            position: relative;
+
+            overflow: hidden;
+
+        }
+
+        .date {
+            text-align: center;
+            color: #555;
+            font-size: 14px;
+            margin: 25px 0;
+        }
+
+        .msg-wrapper {
+            margin: 6px 0;
+        }
+
+        .right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .msg {
+            display: inline-block;
+
+            max-width: 72%;
+
+            padding: 10px 14px;
+
+            border-radius: 12px;
+
+            line-height: 1.45;
+
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .alex {
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .sophia {
+            background: #fae100;
+        }
+
+        .time {
+            font-size: 11px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .right .time {
+            text-align: right;
+        }
+
+        .chat-image {
+            max-width: 220px;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .image-wrapper {
+            margin: 8px 0;
+        }
+
+        .image-right {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .popup-overlay {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.45);
+
+            display: none;
+
+            justify-content: center;
+            align-items: center;
+
+            z-index: 9999;
+
+        }
+
+        .popup-box {
+
+            width: 82%;
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            text-align: center;
+
+        }
+
+        .popup-title {
+
+            font-size: 18px;
+
+            margin-bottom: 25px;
+
+            line-height: 1.4;
+
+            word-break: keep-all;
+
+        }
+
+        .popup-buttons {
+
+            display: flex;
+
+            gap: 12px;
+
+        }
+
+        .popup-buttons button {
+
+            flex: 1;
+
+            height: 50px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            font-size: 18px;
+
+            cursor: pointer;
+
+        }
+
+        .cancel-btn {
+
+            background: #eeeeee;
+
+        }
+
+        .confirm-btn {
+
+            background: #fae100;
+
+        }
+
+        .intent-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+
+            margin-top: 25px;
+
+        }
+
+        .intent-grid button {
+
+            height: 55px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #eeeeee;
+
+            font-size: 18px;
+
+            cursor: pointer;
+
+        }
+
+        .intent-grid button:hover {
+
+            background: #fae100;
+
+        }
+
+        .intent-cancel {
+
+            width: 100%;
+
+            height: 50px;
+
+            margin-top: 18px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #dddddd;
+
+            font-size: 18px;
+
+            cursor: pointer;
+
+        }
+
+        .input-box {
+
+            width: 100%;
+
+            height: 90px;
+
+            margin-top: 20px;
+
+            padding: 15px;
+
+            border: 1px solid #dddddd;
+
+            border-radius: 12px;
+
+            font-size: 18px;
+
+            resize: none;
+
+        }
+
+        .temp-reply {
+
+            display: inline-block;
+
+            max-width: 72%;
+
+            padding: 10px 14px;
+
+            border-radius: 12px;
+
+            line-height: 1.45;
+
+            word-break: break-word;
+
+            white-space: pre-wrap;
+
+            margin-top: 8px;
+
+        }
+
+        .temp-left {
+
+            background: white;
+
+            border: 1px solid #ddd;
+
+        }
+
+        .temp-right {
+
+            background: #fae100;
+
+            margin-left: auto;
+
+        }
+
+        <style>* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: #b2c7da;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+
+            background: #fae100;
+
+            height: 56px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 16px;
+
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .chat {
+            padding: 15px;
+        }
+
+        .date {
+            text-align: center;
+            color: #555;
+            font-size: 14px;
+            margin: 25px 0;
+        }
+
+        .msg-wrapper {
+            margin: 6px 0;
+        }
+
+        .right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .msg {
+            display: inline-block;
+
+            max-width: 72%;
+
+            padding: 10px 14px;
+
+            border-radius: 12px;
+
+            line-height: 1.45;
+
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .alex {
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .sophia {
+            background: #fae100;
+        }
+
+        .time {
+            font-size: 11px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .right .time {
+            text-align: right;
+        }
+
+        .chat-image {
+            max-width: 220px;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .image-wrapper {
+            margin: 8px 0;
+        }
+
+        .image-right {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .popup-overlay {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.45);
+
+            display: none;
+
+            justify-content: center;
+            align-items: center;
+
+            z-index: 9999;
+
+        }
+
+        .popup-box {
+
+            width: 82%;
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            text-align: center;
+
+        }
+
+        .popup-title {
+
+            font-size: 18px;
+
+            margin-bottom: 25px;
+
+            line-height: 1.4;
+
+            word-break: keep-all;
+
+        }
+
+        .popup-buttons {
+
+            display: flex;
+
+            gap: 12px;
+
+        }
+
+        .popup-buttons button {
+
+            flex: 1;
+
+            height: 50px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            font-size: 18px;
+
+            cursor: pointer;
+
+        }
+
+        .cancel-btn {
+
+            background: #eeeeee;
+
+        }
+
+        .confirm-btn {
+
+            background: #fae100;
+
+        }
+
+        .intent-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+
+            margin-top: 25px;
+
+        }
+
+        .intent-grid button {
+
+            height: 55px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #eeeeee;
+
+            font-size: 18px;
+
+            cursor: pointer;
+
+        }
+
+        .intent-grid button:hover {
+
+            background: #fae100;
+
+        }
+
+        .intent-cancel {
+
+            width: 100%;
+
+            height: 50px;
+
+            margin-top: 18px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #dddddd;
+
+            font-size: 18px;
+
+            cursor: pointer;
+
+        }
+
+        .input-box {
+
+            width: 100%;
+
+            height: 90px;
+
+            margin-top: 20px;
+
+            padding: 15px;
+
+            border: 1px solid #dddddd;
+
+            border-radius: 12px;
+
+            font-size: 18px;
+
+            resize: none;
+
+        }
+
+        .temp-reply {
+
+            display: inline-block;
+
+            max-width: 72%;
+
+            padding: 10px 14px;
+
+            border-radius: 12px;
+
+            line-height: 1.45;
+
+            word-break: break-word;
+
+            white-space: pre-wrap;
+
+            margin-top: 8px;
+
+        }
+
+        .temp-left {
+
+            background: white;
+
+            border: 1px solid #ddd;
+
+        }
+
+        .temp-right {
+
+            background: #fae100;
+
+            margin-left: auto;
+
+        }
+
+        .reply-right {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            margin: 8px 0;
+
+        }
+
+        .reply-left {
+
+            display: flex;
+
+            justify-content: flex-start;
+
+            margin: 8px 0;
+
+        }
+
+        .glitch {
+
+            animation: tvNoise 3s;
+
+        }
+
+        @keyframes tvNoise {
+
+            0% {
+
+                filter: none;
+                opacity: 1;
+
+            }
+
+            15% {
+
+                filter:
+                    grayscale(1) contrast(2) brightness(1.5);
+
+            }
+
+            30% {
+
+                filter:
+                    grayscale(1) contrast(3) brightness(0.5);
+
+            }
+
+            45% {
+
+                filter:
+                    grayscale(1) contrast(2.5) brightness(1.8);
+
+            }
+
+            60% {
+
+                filter:
+                    grayscale(1) brightness(0.7);
+
+            }
+
+            80% {
+
+                filter:
+                    grayscale(1) contrast(3);
+
+            }
+
+            100% {
+
+                filter: none;
+                opacity: 1;
+
+            }
+
+        }
+
+        .glitch::after {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            pointer-events: none;
+
+            background:
+
+                repeating-linear-gradient(0deg,
+
+                    rgba(255, 255, 255, 0.25) 0px,
+
+                    rgba(255, 255, 255, 0.25) 2px,
+
+                    transparent 2px,
+
+                    transparent 6px);
+
+            animation:
+
+                scanline 0.05s linear infinite;
+
+        }
+
+        @keyframes scanline {
+
+            from {
+
+                transform:
+                    translateY(-30px);
+
+            }
+
+            to {
+
+                transform:
+                    translateY(30px);
+
+            }
+
+        }
+
+        .flash {
+
+            animation: flashBubble 0.5s;
+
+        }
+
+        @keyframes flashBubble {
+
+            0% {
+
+                transform: scale(1);
+
+            }
+
+            50% {
+
+                transform: scale(1.12);
+
+            }
+
+            100% {
+
+                transform: scale(1);
+
+            }
+
+        }
+
+        .blackout {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: black;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            z-index: 99999;
+
+        }
+
+        .blackout.show {
+
+            opacity: 1;
+
+        }
+
+        .replyFlash {
+
+            animation: replyAppear 0.5s;
+
+        }
+
+        @keyframes replyAppear {
+
+            0% {
+
+                transform: scale(0.85);
+
+                opacity: 0;
+
+            }
+
+            50% {
+
+                transform: scale(1.12);
+
+                opacity: 1;
+
+            }
+
+            100% {
+
+                transform: scale(1);
+
+                opacity: 1;
+
+            }
+
+        }
+
+        .fade-out {
+
+            opacity: 0;
+
+            transition: opacity 0.5s;
+
+            pointer-events: none;
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        Alex
+    </div>
+
+    <div id="chat" class="chat"></div>
+    <div class="popup-overlay" id="confirmPopup">
+
+        <div class="popup-box">
+
+            <div class="popup-title">
+
+                이 문장을 수정하시겠습니까?
+
+            </div>
+
+            <div class="popup-buttons">
+
+                <button class="cancel-btn" onclick="closePopup()">
+
+                    취소
+
+                </button>
+
+                <button class="confirm-btn" onclick="goNextStep()">
+
+                    확인
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="popup-overlay" id="intentPopup">
+
+        <div class="popup-box">
+
+            <div class="popup-title">
+
+                이 순간으로 돌아간다면,
+
+                <br>
+
+                어떤 선택을 하시겠습니까?
+
+            </div>
+
+            <div class="intent-grid">
+
+                <button onclick="selectIntent('사과하기')">
+                    사과하기
+                </button>
+
+                <button onclick="selectIntent('화내기')">
+                    화내기
+                </button>
+
+                <button onclick="selectIntent('다정하기')">
+                    다정하기
+                </button>
+
+                <button onclick="selectIntent('밀어내기')">
+                    밀어내기
+                </button>
+
+                <button onclick="selectIntent('고백하기')">
+                    고백하기
+                </button>
+
+                <button onclick="selectIntent('포기하기')">
+                    포기하기
+                </button>
+
+            </div>
+
+            <button class="intent-cancel" onclick="closeIntentPopup()">
+
+                취소
+
+            </button>
+
+        </div>
+
+    </div>
+    <div class="popup-overlay" id="editPopup">
+
+        <div class="popup-box">
+
+            <div id="intentTitle" class="popup-title">
+
+            </div>
+
+            <div style="
+            font-size:14px;
+            color:#888;
+            margin-bottom:8px;
+            ">
+
+                선택한 문장
+
+            </div>
+
+            <div id="originalText" style="
+            font-size:16px;
+            color:#666;
+            margin-bottom:20px;
+            ">
+
+            </div>
+
+            <div class="popup-title" style="
+        font-size:18px;
+        margin-bottom:15px;
+        ">
+
+                어떤 말로 수정하시겠습니까?
+
+            </div>
+
+            <textarea id="newMessage" class="input-box"></textarea>
+
+            <div class="popup-buttons" style="
+        margin-top:20px;
+        ">
+
+                <button class="cancel-btn" onclick="closeEditPopup()">
+
+                    취소
+
+                </button>
+
+                <button class="confirm-btn" onclick="showReply()">
+
+                    확인
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+        let selectedText = "";
+
+        let selectedIntent = "";
+
+        let selectedSender = "";
+
+        let selectedBubble = "";
+
+        let replyBubble = "";
+
+        const replies = {
+
+            "사과하기": [
+
+                "사과 받는 것도 지친다",
+
+                "미안하면 다야?",
+
+                "이제 와서 사과는 조금 늦은 것 같네"
+
+            ],
+
+            "화내기": [
+
+                "그래, 너가 항상 그렇지 뭐",
+
+                "너만 화낼 줄 알아?",
+
+                "결국 또 나한테 상처 주네"
+
+            ],
+
+            "다정하기": [
+
+                "그 말을 너무 듣고 싶었어",
+
+                "이제 와서 왜 신경 쓰는 척 해",
+
+                "보고싶다"
+
+            ],
+
+            "밀어내기": [
+
+                "알겠어. 그게 네 선택이라면.",
+
+                "그럼 끝이네 우리",
+
+                "관두자 그럼"
+
+            ],
+
+            "고백하기": [
+
+                "사실 나도",
+
+                "보고싶어",
+
+                "조금만 더 빨리 말해주지"
+
+            ],
+
+            "포기하기": [
+
+                "그래 너 맘대로 해",
+
+                "잘 지내",
+
+                "다시는 보지 말자"
+            ]
+
+        };
+        async function loadChat() {
+
+            const response =
+                await fetch("sophia_archive.json");
+
+            const messages =
+                await response.json();
+
+            renderChat(messages);
+
+        }
+
+        function renderChat(messages) {
+
+            const chat =
+                document.getElementById("chat");
+
+            chat.innerHTML = "";
+
+            messages.forEach(item => {
+
+                if (item.type === "date") {
+
+                    const date =
+                        document.createElement("div");
+
+                    date.className = "date";
+
+                    date.textContent =
+                        item.text;
+
+                    chat.appendChild(date);
+
+                    return;
+                }
+
+                if (item.type === "image") {
+
+                    const wrapper =
+                        document.createElement("div");
+
+                    wrapper.className =
+                        item.sender === "Sophia"
+                            ? "image-wrapper image-right"
+                            : "image-wrapper";
+
+                    item.images.forEach(src => {
+
+                        const img =
+                            document.createElement("img");
+
+                        img.src = src;
+
+                        img.className =
+                            "chat-image";
+
+                        wrapper.appendChild(img);
+
+                    });
+
+                    chat.appendChild(wrapper);
+
+                    return;
+                }
+
+                const wrapper =
+                    document.createElement("div");
+
+                wrapper.className =
+                    item.sender === "Sophia"
+                        ? "msg-wrapper right"
+                        : "msg-wrapper";
+
+                const bubble =
+                    document.createElement("div");
+
+                bubble.className =
+                    "msg " +
+                    item.sender.toLowerCase();
+
+                bubble.textContent =
+                    item.text;
+                bubble.style.cursor = "pointer";
+
+                bubble.onclick = function () {
+
+                    selectedText =
+                        item.text;
+
+                    selectedSender =
+                        item.sender;
+
+                    selectedBubble =
+                        wrapper;
+
+                    document
+                        .getElementById(
+                            "confirmPopup"
+                        )
+                        .style.display =
+                        "flex";
+
+                };
+                const time =
+                    document.createElement("div");
+
+                time.className =
+                    "time";
+
+                time.textContent =
+                    item.time || "";
+
+                wrapper.appendChild(bubble);
+                wrapper.appendChild(time);
+
+                chat.appendChild(wrapper);
+
+            });
+
+        }
+
+        loadChat();
+        function closePopup() {
+
+            document
+                .getElementById(
+                    "confirmPopup"
+                )
+                .style.display =
+                "none";
+
+        }
+
+        function goNextStep() {
+
+            closePopup();
+
+            document
+                .getElementById(
+                    "intentPopup"
+                )
+                .style.display =
+                "flex";
+
+        }
+        function closeIntentPopup() {
+
+            document
+                .getElementById(
+                    "intentPopup"
+                )
+                .style.display =
+                "none";
+
+        }
+        function selectIntent(intent) {
+
+            selectedIntent =
+                intent;
+
+            closeIntentPopup();
+
+            document
+                .getElementById(
+                    "intentTitle"
+                )
+                .innerText =
+                selectedIntent;
+
+            document
+                .getElementById(
+                    "originalText"
+                )
+                .innerText =
+                "\"" +
+                selectedText +
+                "\"";
+
+            document
+                .getElementById(
+                    "editPopup"
+                )
+                .style.display =
+                "flex";
+
+        }
+        function closeEditPopup() {
+
+            document
+                .getElementById(
+                    "editPopup"
+                )
+                .style.display =
+                "none";
+
+            document
+                .getElementById(
+                    "newMessage"
+                )
+                .value = "";
+
+        }
+
+        function showReply() {
+
+            const newText =
+                document
+                    .getElementById(
+                        "newMessage"
+                    )
+                    .value;
+
+            const replyList =
+                replies[selectedIntent];
+
+            const randomReply =
+
+                replyList[
+                Math.floor(
+                    Math.random()
+                    *
+                    replyList.length
+                )
+                ];
+
+            const editedBubble =
+
+                selectedBubble
+                    .querySelector(".msg");
+
+            editedBubble.textContent =
+                newText;
+
+            editedBubble.classList.add(
+                "flash"
+            );
+
+            setTimeout(function () {
+
+                editedBubble.classList.remove(
+                    "flash"
+                );
+
+            }, 500);
+            replyBubble =
+                document.createElement("div");
+
+            if (selectedSender == "Alex") {
+
+                replyBubble.className =
+                    "reply-right";
+
+            }
+            else {
+
+                replyBubble.className =
+                    "reply-left";
+
+            }
+
+            const tempBubble =
+                document.createElement("div");
+
+            tempBubble.className =
+                "temp-reply";
+
+            if (selectedSender == "Alex") {
+
+                tempBubble.classList.add(
+                    "temp-right"
+                );
+
+            }
+            else {
+
+                tempBubble.classList.add(
+                    "temp-left"
+                );
+
+            }
+
+            tempBubble.textContent =
+                randomReply;
+
+            tempBubble.classList.add(
+                "replyFlash"
+            );
+
+            replyBubble.appendChild(
+                tempBubble
+            );
+            closeEditPopup();
+            document
+                .getElementById(
+                    "newMessage"
+                )
+                .value = "";
+
+            setTimeout(function () {
+
+                selectedBubble.after(
+                    replyBubble
+                );
+
+                setTimeout(function () {
+
+                    const chat =
+                        document.getElementById(
+                            "chat"
+                        );
+
+                    const allItems =
+
+                        chat.children;
+
+                    for (
+
+                        let i = 0;
+
+                        i < allItems.length;
+
+                        i++
+
+                    ) {
+
+                        const item =
+                            allItems[i];
+
+                        if (
+
+                            item != selectedBubble &&
+
+                            item != replyBubble
+
+                        ) {
+
+                            item.classList.add(
+                                "fade-out"
+                            );
+
+                        }
+
+                    }
+
+                    chat.classList.add(
+                        "glitch"
+                    );
+
+                    let shake =
+                        setInterval(function () {
+
+                            chat.style.marginTop =
+
+                                (
+                                    Math.random()
+                                    * 24
+                                    - 12
+                                )
+
+                                + "px";
+
+                            chat.style.marginLeft =
+
+                                (
+                                    Math.random()
+                                    * 8
+                                    - 4
+                                )
+
+                                + "px";
+
+                        }, 15);
+
+                    setTimeout(function () {
+
+                        clearInterval(
+                            shake
+                        );
+
+                        chat.style.marginTop =
+                            "0px";
+
+                        chat.style.marginLeft =
+                            "0px";
+
+                        document
+                            .getElementById(
+                                "blackout"
+                            )
+                            .classList.add(
+                                "show"
+                            );
+
+                        setTimeout(function () {
+
+                            selectedBubble
+                                .querySelector(".msg")
+                                .textContent =
+                                selectedText;
+
+                            replyBubble.remove();
+
+                            chat.classList.remove(
+                                "glitch"
+                            );
+
+                            const allItems =
+
+                                chat.children;
+
+                            for (
+
+                                let i = 0;
+
+                                i < allItems.length;
+
+                                i++
+
+                            ) {
+
+                                allItems[i]
+                                    .classList.remove(
+                                        "fade-out"
+                                    );
+
+                            }
+
+                            document
+                                .getElementById(
+                                    "blackout"
+                                )
+                                .classList.remove(
+                                    "show"
+                                );
+                        }, 800);
+                    }, 3000);
+
+                }, 3000);
+
+            }, 1500);
+
+        }
+    </script>
+    <div id="blackout" class="blackout">
+    </div>
+</body>
+
+</html>
