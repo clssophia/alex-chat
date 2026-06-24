@@ -312,7 +312,7 @@
 
         }
 
-        <style>* {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -754,9 +754,7 @@
         }
 
         .blackout {
-
             position: fixed;
-
             top: 0;
             left: 0;
 
@@ -764,27 +762,36 @@
             height: 100%;
 
             background: black;
-
             opacity: 0;
 
             pointer-events: none;
-
             z-index: 99999;
-
-            transition: opacity 0.5s;
-
         }
 
-        .blackout.show {
-
-            opacity: 1;
-
+        .blackout.tv-off {
+            animation: tvOff 0.22s forwards;
         }
 
-        .replyFlash {
+        @keyframes tvOff {
+            0% {
+                background: white;
+                opacity: 1;
+            }
 
-            animation: replyAppear 0.5s;
+            18% {
+                background: white;
+                opacity: 1;
+            }
 
+            35% {
+                background: black;
+                opacity: 1;
+            }
+
+            100% {
+                background: black;
+                opacity: 1;
+            }
         }
 
         @keyframes replyAppear {
@@ -1432,13 +1439,10 @@
                         chat.style.marginLeft =
                             "0px";
 
-                        document
-                            .getElementById(
-                                "blackout"
-                            )
-                            .classList.add(
-                                "show"
-                            );
+                        const blackout =
+                            document.getElementById("blackout");
+
+                        blackout.classList.add("tv-off");
 
                         setTimeout(function () {
 
@@ -1478,24 +1482,18 @@
                             chat.style.opacity =
                                 "0";
 
-                            document
-                                .getElementById(
-                                    "blackout"
-                                )
-                                .classList.remove(
-                                    "show"
-                                );
+                            blackout.classList.remove("tv-off");
 
                             setTimeout(function () {
 
                                 chat.style.transition =
-                                    "opacity 0.5s";
+                                    "opacity 0.08s";
 
                                 chat.style.opacity =
                                     "1";
 
                             }, 50);
-                        }, 800);
+                        }, 220);
                     }, 3000);
 
                 }, 2500);
